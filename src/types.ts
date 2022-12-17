@@ -1,16 +1,20 @@
 interface NativeParam {
-  name: string
-  type: string
+  name: string;
+  type: string;
 }
 
 export interface NativeDefinition {
-  name: string
-  params: NativeParam[]
-  results: string
-  description: string
-  examples: []
-  hash: string
-  ns: string
-  jhash: string
-  manualHash: boolean
+  name: string;
+  params: NativeParam[];
+  results: string;
+  description: string;
+  examples: [];
+  hash: string;
+  ns: string;
+  jhash: string;
+  manualHash: boolean;
+}
+
+export interface NativeJSONDefinition {
+  [key: string]: Record<string, NativeDefinition>;
 }

@@ -1,8 +1,13 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es5",
-    "sourceMap": true
+    "target": "ES2021",
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "lib": [],
+    "outDir": "lib"
   },
   "include": [
     "./src"

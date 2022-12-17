@@ -2,28 +2,32 @@
   "name": "intelij-natives-citizenfx",
   "version": "1.0.0",
   "description": "",
-  "main": "main.ts",
+  "main": "src/index.ts",
   "scripts": {
-    "start": "ts-node main.ts"
+    "start": "ts-node src/index.ts",
+    "build": "tsc"
+  },
+  "bin": {
+    "cfx-jetbrains": "./lib/"
   },
   "author": "Dylan Malandain",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "devDependencies": {
-    "@types/node": "^14.14.37",
-    "ts-node": "^8.1.1",
-    "typescript": "^3.4.5"
+    "@types/common-tags": "^1.8.1",
+    "@types/figlet": "^1.5.5",
+    "@types/fs-extra": "^9.0.13",
+    "@types/node": "^16.18.10",
+    "@types/request": "^2.48.8",
+    "@types/terminal-kit": "^1.28.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
   },
   "dependencies": {
-    "@akanass/rx-http-request": "^3.1.0",
-    "@types/common-tags": "^1.8.1",
-    "@types/fs-extra": "^7.0.0",
-    "@types/request": "^2.48.1",
-    "@types/terminal-kit": "^1.28.0",
-    "chalk": "^2.4.2",
-    "common-tags": "^1.8.0",
-    "figlet": "^1.2.4",
-    "fs-extra": "^8.0.1",
-    "request": "^2.88.0",
-    "terminal-kit": "^1.31.6"
+    "chalk": "^5.2.0",
+    "common-tags": "^1.8.2",
+    "figlet": "^1.5.2",
+    "fs-extra": "^11.1.0",
+    "got": "^11.8.6",
+    "terminal-kit": "^3.0.0"
   }
 }

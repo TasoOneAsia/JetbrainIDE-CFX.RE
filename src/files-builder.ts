@@ -1,5 +1,6 @@
 import * as filesystem from "fs-extra";
-import { Main } from "../main";
+import { Main } from "./main";
+import { NativeJSONDefinition } from "./types";
 
 /**
  * The [[FilesBuilder]] class allows you to manage the generation, migration, and everything necessary to run the [[ContentGenerate]]
@@ -39,8 +40,8 @@ export class FilesBuilder {
    *
    * @return void
    */
-  public category = (data: JSON): void => {
-    for (let category in data)
+  public category = (data: NativeJSONDefinition): void => {
+    for (const category in data)
       filesystem
         .ensureFile(this.directory + "/" + category.toString() + ".lua")
         .then(() => {

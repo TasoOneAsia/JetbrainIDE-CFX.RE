@@ -1,9 +1,12 @@
-import * as request from "request";
-import { FilesBuilder } from "./src/files-builder";
-import { ContentGenerate } from "./src/content-generate";
-import * as figlet from "figlet";
-import { GamesType } from "./src/enum/GamesType";
+#!/usr/bin/env node
+
+import { GamesType } from "./enum/GamesType";
+import figlet from "figlet";
 import { terminal as term } from "terminal-kit";
+import got from "got";
+import { NativeJSONDefinition } from "./types";
+import { FilesBuilder } from "./files-builder";
+import { ContentGenerate } from "./content-generate";
 
 /**
  * The [[Main]] class that groups together all the logical execution processes of the system.
@@ -33,22 +36,26 @@ export class Main {
    * @return void
    */
   public static onEnable = (dir: string, gametype: GamesType): void => {
-    let json = Main.getNativeLink(gametype);
+    const json = Main.getNativeLink(gametype);
     if (json !== undefined) {
       figlet("JetBrainIDE-CitizenFX", (err, data) => {
         term.blue(data);
         term.red("\n Dylan Malandain - @iTexZoz \n");
       });
-      request.get(json, (error, response, content) => {
-        const files = new FilesBuilder(dir);
-        const json = JSON.parse(content);
-        files.init().then(async () => {
-          files.category(json);
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          const builder = new ContentGenerate(files);
-          builder.generateTemplate(json);
-        });
-      });
+
+      got
+        .get(json)
+        .json<NativeJSONDefinition>()
+        .then((data) => {
+          const files = new FilesBuilder(dir);
+          files.init().then(async () => {
+            files.category(data);
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            const builder = new ContentGenerate(files);
+            builder.generateTemplate(data);
+          });
+        })
+        .catch((e) => console.error(e));
     } else {
       process.exit();
     }
@@ -84,31 +91,3 @@ export class Main {
     if (stats.native.current == stats.native.total) process.exit();
   };
 }
-
-term.cyan(
-  "Welcome to the native completion generator tool for Jetbrain IDEs for cfx.re projects.\n"
-);
-term.cyan("Please select the game concerned.\n");
-
-let items = [
-  "1. (FiveM) GTA V",
-  "2. (RedM) Red Dead Redemption 2",
-  "3. CFX (Is Available for RedM && FiveM)",
-];
-
-term.singleColumnMenu(items, function (error, response) {
-  switch (response.selectedIndex) {
-    case 0:
-      new Main.onEnable("build/cfx/GTAV", GamesType.GTA);
-      break;
-    case 1:
-      new Main.onEnable("build/cfx/RDR3", GamesType.RDR3);
-      break;
-    default:
-      new Main.onEnable("build/cfx/CFX-NATIVE", GamesType.Cfx);
-      break;
-  }
-  // process.exit();
-});
-
-// new Main.onEnable("build/cfx/GTAV", GamesType.GTA);

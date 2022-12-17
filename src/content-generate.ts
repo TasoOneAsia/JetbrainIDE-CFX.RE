@@ -1,6 +1,6 @@
 import { FilesBuilder } from "./files-builder";
 import { stripIndents } from "common-tags";
-import { NativeDefinition } from "./types";
+import { NativeDefinition, NativeJSONDefinition } from "./types";
 
 interface TemplateObject {
   desc: string;
@@ -72,9 +72,12 @@ ${_function}
       case "void":
         return discardPtr;
 
+      case "hash":
       case "char":
         return "string";
+
       case "ped":
+      case "player":
       case "vehicle":
       case "entity":
       case "float":
@@ -82,6 +85,7 @@ ${_function}
       case "uint":
       case "int":
         return "number";
+
       case "bool":
         return "boolean";
 
@@ -95,7 +99,7 @@ ${_function}
    *
    * @param field
    */
-  private fieldToReplace = (field): string => {
+  private fieldToReplace = (field: string): string => {
     if (field === "end") return "end_";
     else if (field === "repeat") return "_repeat";
     else return field;
@@ -108,7 +112,7 @@ ${_function}
    *
    * @return void
    */
-  public generateTemplate = (data: JSON): void => {
+  public generateTemplate = (data: NativeJSONDefinition): void => {
     /**
      * Current count native build
      */
@@ -174,12 +178,11 @@ ${_function}
    * @return String
    */
   private nativeName = (data: any, natives: string): string => {
-    if (data.name !== undefined || natives !== undefined)
-      return (data.name || natives)
-        .toLowerCase()
-        .replace("0x", "n_0x")
-        .replace(/_([a-z])/g, (sub, bit) => bit.toUpperCase())
-        .replace(/^([a-z])/, (sub, bit) => bit.toUpperCase());
+    return (data.name || natives)
+      .toLowerCase()
+      .replace("0x", "n_0x")
+      .replace(/_([a-z])/g, (_: unknown, bit: string) => bit.toUpperCase())
+      .replace(/^([a-z])/, (_: unknown, bit: string) => bit.toUpperCase());
   };
 
   /**
@@ -251,10 +254,10 @@ ${_function}
    *
    * @return string Returns the predefined pattern
    */
-  private nativeUsage = (data: any, nativeParams: string): string => {
-    const template = (result, native, params) =>
-      `${result} ${native}(${params});`;
-
-    return template(data.results, data.name, nativeParams);
-  };
+  // private nativeUsage = (data: any, nativeParams: string): string => {
+  //   const template = (result, native, params) =>
+  //     `${result} ${native}(${params});`;
+  //
+  //   return template(data.results, data.name, nativeParams);
+  // };
 }
